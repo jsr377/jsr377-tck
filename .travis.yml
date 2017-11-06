@@ -10,6 +10,9 @@ cache:
   - $HOME/.sonar/cache/
 before_script:
   - ./gradlew --no-daemon --version
+  - cd ../..
+  - git clone --depth=50 --branch=master https://github.com/jsr377/jsr377-api.git jsr377/jsr377-api
+  - cd jsr377/jsr377-tck
 script: ./gradlew --console=plain --no-daemon clean build jacocoTestReport
 env: TERM=dumb
 after_success: ./gradlew --console=plain --no-daemon coveralls

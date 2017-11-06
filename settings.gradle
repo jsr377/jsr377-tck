@@ -1,0 +1,3 @@
+rootProject.name = 'jsr377-tck'
+
+includeBuild '../jsr377-api'
