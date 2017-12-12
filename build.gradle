@@ -77,8 +77,9 @@ dependencies {
     compile "${project.group}:jsr377-api:$jsr377Version"
     compile "junit:junit:$junitVersion"
     compile "pl.pragmatists:JUnitParams:$junitParamsVersion"
-    compile "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    compile "org.hamcrest:java-hamcrest:$hamcrestVersion"
     compile "org.awaitility:awaitility:$awaitilityVersion"
+    compile "org.assertj:assertj-core:$assertjVersion"
     testCompile "org.mockito:mockito-core:$mockitoVersion"
 }
 
