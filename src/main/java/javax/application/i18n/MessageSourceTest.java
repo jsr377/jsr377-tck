@@ -59,13 +59,13 @@ public abstract class MessageSourceTest {
         MessageSource messageSource = resolveMessageSource();
 
         // expect:
-        t.assertThat((Object) messageSource.getMessage(KEY_PROVERB))
+        t.assertThat(messageSource.getMessage(KEY_PROVERB))
             .isEqualTo(PROVERB_FORMAT);
-        t.assertThat((Object) messageSource.getMessage(KEY_PROVERB, Locale.getDefault()))
+        t.assertThat(messageSource.getMessage(KEY_PROVERB, Locale.getDefault()))
             .isEqualTo(PROVERB_FORMAT);
-        t.assertThat((Object) messageSource.getMessage(KEY_PROVERB, TWO_ARGS))
+        t.assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS))
             .isEqualTo(PROVERB_TEXT);
-        t.assertThat((Object) messageSource.getMessage(KEY_PROVERB, TWO_ARGS, Locale.getDefault()))
+        t.assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS, Locale.getDefault()))
             .isEqualTo(PROVERB_TEXT);
     }
 
