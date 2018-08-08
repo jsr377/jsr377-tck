@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.application.resources;
+package javax.application.resources.tck;
 
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.After;
@@ -21,6 +21,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import javax.application.resources.NoSuchResourceException;
+import javax.application.resources.ResourceResolver;
 import java.util.Locale;
 
 /**

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javax.application.threading;
+package javax.application.threading.tck;
 
 import org.junit.Test;
 
+import javax.application.threading.ThreadingHandler;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
