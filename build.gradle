@@ -48,7 +48,6 @@ ext {
     buildCreatedBy = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString()
 }
 
-apply from: 'gradle/publishing.gradle'
 apply from: 'gradle/code-coverage.gradle'
 apply from: 'gradle/code-quality.gradle'
 
@@ -115,3 +114,5 @@ javadoc {
     options.footer      = project.javadocFooter
     options.links       = ['http://docs.oracle.com/javase/8/docs/api/']
 }
+
+apply from: 'gradle/publishing.gradle'
