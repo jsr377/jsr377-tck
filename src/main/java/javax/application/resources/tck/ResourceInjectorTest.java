@@ -15,12 +15,15 @@
  */
 package javax.application.resources.tck;
 
-import org.assertj.core.api.JUnitSoftAssertions;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.application.resources.InjectedResource;
 import javax.application.resources.ResourceInjector;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Verifies that implementations of {@code ResourceInjector} can inject resources on a target bean.
@@ -44,9 +47,6 @@ import javax.application.resources.ResourceInjector;
  * @author Andres Almiray
  */
 public abstract class ResourceInjectorTest {
-    @Rule
-    public final JUnitSoftAssertions t = new JUnitSoftAssertions();
-
     protected abstract ResourceInjector resolveResourcesInjector();
 
     @Test
@@ -58,24 +58,26 @@ public abstract class ResourceInjectorTest {
         resolveResourcesInjector().injectResources(bean);
 
         // then:
-        t.assertThat(bean.privateField()).isEqualTo("privateField");
-        t.assertThat(bean.fieldBySetter()).isEqualTo("fieldBySetter");
-        t.assertThat(bean.privateIntField()).isEqualTo(42);
-        t.assertThat(bean.intFieldBySetter()).isEqualTo(21);
-        t.assertThat(bean.fieldWithKey()).isEqualTo("no_args");
-        t.assertThat(bean.fieldWithKeyAndArgs()).isEqualTo("with_args 1 2");
-        t.assertThat(bean.fieldWithKeyNoArgsWithDefault()).isEqualTo("DEFAULT_NO_ARGS");
-        t.assertThat(bean.fieldWithKeyWithArgsWithDefault()).isEqualTo("DEFAULT_WITH_ARGS");
-        t.assertThat(bean.notFound()).isNullOrEmpty();
-        t.assertThat(bean.superPrivateField()).isEqualTo("superPrivateField");
-        t.assertThat(bean.superFieldBySetter()).isEqualTo("superFieldBySetter");
-        t.assertThat(bean.superPrivateIntField()).isEqualTo(420);
-        t.assertThat(bean.superIntFieldBySetter()).isEqualTo(210);
-        t.assertThat(bean.superFieldWithKey()).isEqualTo("super_no_args");
-        t.assertThat(bean.superFieldWithKeyAndArgs()).isEqualTo("super_with_args 1 2");
-        t.assertThat(bean.superFieldWithKeyNoArgsWithDefault()).isEqualTo("SUPER_DEFAULT_NO_ARGS");
-        t.assertThat(bean.superFieldWithKeyWithArgsWithDefault()).isEqualTo("SUPER_DEFAULT_WITH_ARGS");
-        t.assertThat(bean.superNotFound()).isNullOrEmpty();
+        assertAll(
+            () -> assertThat(bean.privateField(), equalTo("privateField")),
+            () -> assertThat(bean.fieldBySetter(), equalTo("fieldBySetter")),
+            () -> assertThat(bean.privateIntField(), equalTo(42)),
+            () -> assertThat(bean.intFieldBySetter(), equalTo(21)),
+            () -> assertThat(bean.fieldWithKey(), equalTo("no_args")),
+            () -> assertThat(bean.fieldWithKeyAndArgs(), equalTo("with_args 1 2")),
+            () -> assertThat(bean.fieldWithKeyNoArgsWithDefault(), equalTo("DEFAULT_NO_ARGS")),
+            () -> assertThat(bean.fieldWithKeyWithArgsWithDefault(), equalTo("DEFAULT_WITH_ARGS")),
+            () -> assertThat(bean.notFound(), nullValue()),
+            () -> assertThat(bean.superPrivateField(), equalTo("superPrivateField")),
+            () -> assertThat(bean.superFieldBySetter(), equalTo("superFieldBySetter")),
+            () -> assertThat(bean.superPrivateIntField(), equalTo(420)),
+            () -> assertThat(bean.superIntFieldBySetter(), equalTo(210)),
+            () -> assertThat(bean.superFieldWithKey(), equalTo("super_no_args")),
+            () -> assertThat(bean.superFieldWithKeyAndArgs(), equalTo("super_with_args 1 2")),
+            () -> assertThat(bean.superFieldWithKeyNoArgsWithDefault(), equalTo("SUPER_DEFAULT_NO_ARGS")),
+            () -> assertThat(bean.superFieldWithKeyWithArgsWithDefault(), equalTo("SUPER_DEFAULT_WITH_ARGS")),
+            () -> assertThat(bean.superNotFound(), nullValue())
+        );
     }
 
     public static class SuperBean {

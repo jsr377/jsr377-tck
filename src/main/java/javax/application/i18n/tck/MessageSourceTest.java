@@ -15,15 +15,18 @@
  */
 package javax.application.i18n.tck;
 
-import org.assertj.core.api.JUnitSoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.application.i18n.MessageSource;
 import javax.application.i18n.NoSuchMessageException;
 import java.util.Locale;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Andres Almiray
@@ -37,20 +40,17 @@ public abstract class MessageSourceTest {
     protected static final String PROVERB_FORMAT = "An {0} a day keeps the {1} away";
     protected static final String PROVERB_TEXT = "An apple a day keeps the doctor away";
 
-    @Rule
-    public final JUnitSoftAssertions t = new JUnitSoftAssertions();
-
     protected abstract MessageSource resolveMessageSource();
 
     private Locale defaultLocale;
 
-    @Before
+    @BeforeEach
     public void setup() {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         Locale.setDefault(defaultLocale);
     }
@@ -61,14 +61,16 @@ public abstract class MessageSourceTest {
         MessageSource messageSource = resolveMessageSource();
 
         // expect:
-        t.assertThat(messageSource.getMessage(KEY_PROVERB))
-            .isEqualTo(PROVERB_FORMAT);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB, Locale.getDefault()))
-            .isEqualTo(PROVERB_FORMAT);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS))
-            .isEqualTo(PROVERB_TEXT);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS, Locale.getDefault()))
-            .isEqualTo(PROVERB_TEXT);
+        assertAll(
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB),
+                equalTo(PROVERB_FORMAT)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB, Locale.getDefault()),
+                equalTo(PROVERB_FORMAT)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS),
+                equalTo(PROVERB_TEXT)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB, TWO_ARGS, Locale.getDefault()),
+                equalTo(PROVERB_TEXT))
+        );
     }
 
     @Test
@@ -77,14 +79,16 @@ public abstract class MessageSourceTest {
         MessageSource messageSource = resolveMessageSource();
 
         // expect:
-        t.assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, Locale.getDefault(), DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, TWO_ARGS, DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, TWO_ARGS, Locale.getDefault(), DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
+        assertAll(
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, Locale.getDefault(), DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, TWO_ARGS, DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(messageSource.getMessage(KEY_PROVERB_BOGUS, TWO_ARGS, Locale.getDefault(), DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE))
+        );
     }
 
     @Test
@@ -93,13 +97,15 @@ public abstract class MessageSourceTest {
         MessageSource messageSource = resolveMessageSource();
 
         // expect:
-        t.assertThatThrownBy(() -> messageSource.getMessage(KEY_BOGUS))
-            .isInstanceOf(NoSuchMessageException.class);
-        t.assertThatThrownBy(() -> messageSource.getMessage(KEY_BOGUS, Locale.getDefault()))
-            .isInstanceOf(NoSuchMessageException.class);
-        t.assertThatThrownBy(() -> messageSource.getMessage(KEY_BOGUS, TWO_ARGS))
-            .isInstanceOf(NoSuchMessageException.class);
-        t.assertThatThrownBy(() -> messageSource.getMessage(KEY_BOGUS, TWO_ARGS, Locale.getDefault()))
-            .isInstanceOf(NoSuchMessageException.class);
+        assertAll(
+            () -> assertThrows(NoSuchMessageException.class,
+                () -> messageSource.getMessage(KEY_BOGUS)),
+            () -> assertThrows(NoSuchMessageException.class,
+                () -> messageSource.getMessage(KEY_BOGUS, Locale.getDefault())),
+            () -> assertThrows(NoSuchMessageException.class,
+                () -> messageSource.getMessage(KEY_BOGUS, TWO_ARGS)),
+            () -> assertThrows(NoSuchMessageException.class,
+                () -> messageSource.getMessage(KEY_BOGUS, TWO_ARGS, Locale.getDefault()))
+        );
     }
 }

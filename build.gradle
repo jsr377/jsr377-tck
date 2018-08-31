@@ -23,21 +23,21 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
         classpath 'org.ajoberstar:gradle-git:1.7.2'
         classpath 'net.nemerosa:versioning:2.7.1'
         classpath 'org.kordamp.gradle:stats-gradle-plugin:0.2.2'
+        classpath 'gradle.plugin.gradle-java9-collision:plugin:0.2.3'
     }
 }
 
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'net.nemerosa.versioning'
-apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'org.jonnyzzz.java9c'
 
 Date buildTimeAndDate = new Date()
 ext {
@@ -48,7 +48,6 @@ ext {
     buildCreatedBy = "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})".toString()
 }
 
-apply from: 'gradle/code-coverage.gradle'
 apply from: 'gradle/code-quality.gradle'
 
 idea {
@@ -74,12 +73,12 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     compile "${project.group}:jsr377-api:$jsr377Version"
-    compile "junit:junit:$junitVersion"
-    compile "pl.pragmatists:JUnitParams:$junitParamsVersion"
+    compile "org.junit.jupiter:junit-jupiter-api:$junit5Version"
     compile "org.hamcrest:java-hamcrest:$hamcrestVersion"
-    compile "org.awaitility:awaitility:$awaitilityVersion"
-    compile "org.assertj:assertj-core:$assertjVersion"
-    testCompile "org.mockito:mockito-core:$mockitoVersion"
+    compile("org.awaitility:awaitility:$awaitilityVersion") {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+        exclude group: 'org.hamcrest', module: 'hamcrest-library'
+    }
 }
 
 task sourcesJar(type: Jar) {

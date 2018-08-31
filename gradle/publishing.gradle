@@ -33,36 +33,6 @@ jar {
     }
 }
 
-def pomConfig = {
-    name project.name
-    description project.project_description
-    url project.project_url
-    inceptionYear '2015'
-    licenses {
-        license([:]) {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-        }
-    }
-    scm {
-        url project.project_scm
-    }
-    developers {
-        [
-            aalmiray : 'Andres Almiray'
-        ].each { devId, devName ->
-            developer {
-                id devId
-                name devName
-                roles {
-                    role 'JSR-377 Spec lead'
-                }
-            }
-        }
-    }
-}
-
 publishing {
     publications {
         mavenCustom(MavenPublication) {
@@ -70,9 +40,32 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
 
-            pom.withXml {
-                asNode().children().last() + pomConfig
-                asNode().appendNode('description', project.project_description)
+            pom {
+                name = project.name
+                description = project.project_description
+                url = project.project_url
+                inceptionYear = '2015'
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+                scm {
+                    url = project.project_scm
+                }
+                developers {
+                    [
+                        aalmiray : 'Andres Almiray'
+                    ].each { devId, devName ->
+                        developer {
+                            id = devId
+                            name = devName
+                            roles = ['JSR-377 Spec lead']
+                        }
+                    }
+                }
             }
         }
     }

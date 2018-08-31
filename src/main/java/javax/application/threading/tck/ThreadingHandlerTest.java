@@ -15,7 +15,8 @@
  */
 package javax.application.threading.tck;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 import javax.application.threading.ThreadingHandler;
 import java.util.concurrent.Callable;
@@ -24,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Andres Almiray

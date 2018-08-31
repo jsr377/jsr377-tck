@@ -15,15 +15,18 @@
  */
 package javax.application.resources.tck;
 
-import org.assertj.core.api.JUnitSoftAssertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.application.resources.NoSuchResourceException;
 import javax.application.resources.ResourceResolver;
 import java.util.Locale;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author Andres Almiray
@@ -38,20 +41,17 @@ public abstract class ResourceResolverTest {
     protected static final String PROVERB_FORMAT = "An {0} a day keeps the {1} away";
     protected static final String PROVERB_TEXT = "An apple a day keeps the doctor away";
 
-    @Rule
-    public final JUnitSoftAssertions t = new JUnitSoftAssertions();
-
     protected abstract ResourceResolver resolveResourceResolver();
 
     private Locale defaultLocale;
 
-    @Before
+    @BeforeEach
     public void setup() {
         defaultLocale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
     }
 
-    @After
+    @AfterEach
     public void cleanup() {
         Locale.setDefault(defaultLocale);
     }
@@ -62,14 +62,16 @@ public abstract class ResourceResolverTest {
         ResourceResolver resourceResolver = resolveResourceResolver();
 
         // expect:
-        t.assertThat((Object) resourceResolver.resolveResource(KEY_PROVERB))
-            .isEqualTo(PROVERB_FORMAT);
-        t.assertThat((Object) resourceResolver.resolveResource(KEY_PROVERB, Locale.getDefault()))
-            .isEqualTo(PROVERB_FORMAT);
-        t.assertThat((Object) resourceResolver.resolveResource(KEY_PROVERB, TWO_ARGS))
-            .isEqualTo(PROVERB_TEXT);
-        t.assertThat((Object) resourceResolver.resolveResource(KEY_PROVERB, TWO_ARGS, Locale.getDefault()))
-            .isEqualTo(PROVERB_TEXT);
+        assertAll(
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB),
+                equalTo(PROVERB_FORMAT)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB, Locale.getDefault()),
+                equalTo(PROVERB_FORMAT)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB, TWO_ARGS),
+                equalTo(PROVERB_TEXT)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB, TWO_ARGS, Locale.getDefault()),
+                equalTo(PROVERB_TEXT))
+        );
     }
 
     @Test
@@ -78,14 +80,16 @@ public abstract class ResourceResolverTest {
         ResourceResolver resourceResolver = resolveResourceResolver();
 
         // expect:
-        t.assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, Locale.getDefault(), DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, TWO_ARGS, DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
-        t.assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, TWO_ARGS, Locale.getDefault(), DEFAULT_VALUE))
-            .isEqualTo(DEFAULT_VALUE);
+        assertAll(
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, Locale.getDefault(), DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, TWO_ARGS, DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE)),
+            () -> assertThat(resourceResolver.resolveResource(KEY_PROVERB_BOGUS, TWO_ARGS, Locale.getDefault(), DEFAULT_VALUE),
+                equalTo(DEFAULT_VALUE))
+        );
     }
 
     @Test
@@ -95,14 +99,16 @@ public abstract class ResourceResolverTest {
 
         // expect:
         int value = 42;
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, Integer.class))
-            .isEqualTo(value);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, Locale.getDefault(), Integer.class))
-            .isEqualTo(value);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, TWO_ARGS, Integer.class))
-            .isEqualTo(value);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, TWO_ARGS, Locale.getDefault(), Integer.class))
-            .isEqualTo(value);
+        assertAll(
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, Integer.class),
+                equalTo(value)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, Locale.getDefault(), Integer.class),
+                equalTo(value)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, TWO_ARGS, Integer.class),
+                equalTo(value)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_INTEGER, TWO_ARGS, Locale.getDefault(), Integer.class),
+                equalTo(value))
+        );
     }
 
     @Test
@@ -112,14 +118,16 @@ public abstract class ResourceResolverTest {
 
         // expect:
         int defaultValue = 21;
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, defaultValue, Integer.class))
-            .isEqualTo(defaultValue);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, Locale.getDefault(), defaultValue, Integer.class))
-            .isEqualTo(defaultValue);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, defaultValue, Integer.class))
-            .isEqualTo(defaultValue);
-        t.assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Locale.getDefault(), defaultValue, Integer.class))
-            .isEqualTo(defaultValue);
+        assertAll(
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, defaultValue, Integer.class),
+                equalTo(defaultValue)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, Locale.getDefault(), defaultValue, Integer.class),
+                equalTo(defaultValue)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, defaultValue, Integer.class),
+                equalTo(defaultValue)),
+            () -> assertThat(resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Locale.getDefault(), defaultValue, Integer.class),
+                equalTo(defaultValue))
+        );
     }
 
     @Test
@@ -128,14 +136,16 @@ public abstract class ResourceResolverTest {
         ResourceResolver resourceResolver = resolveResourceResolver();
 
         // expect:
-        t.assertThatThrownBy(() -> resourceResolver.resolveResource(KEY_BOGUS))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResource(KEY_BOGUS, Locale.getDefault()))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResource(KEY_BOGUS, TWO_ARGS))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResource(KEY_BOGUS, TWO_ARGS, Locale.getDefault()))
-            .isInstanceOf(NoSuchResourceException.class);
+        assertAll(
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResource(KEY_BOGUS)),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResource(KEY_BOGUS, Locale.getDefault())),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResource(KEY_BOGUS, TWO_ARGS)),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResource(KEY_BOGUS, TWO_ARGS, Locale.getDefault()))
+        );
     }
 
     @Test
@@ -144,13 +154,15 @@ public abstract class ResourceResolverTest {
         ResourceResolver resourceResolver = resolveResourceResolver();
 
         // expect:
-        t.assertThatThrownBy(() -> resourceResolver.resolveResourceConverted(KEY_BOGUS, Integer.class))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResourceConverted(KEY_BOGUS, Locale.getDefault(), Integer.class))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Integer.class))
-            .isInstanceOf(NoSuchResourceException.class);
-        t.assertThatThrownBy(() -> resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Locale.getDefault(), Integer.class))
-            .isInstanceOf(NoSuchResourceException.class);
+        assertAll(
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResourceConverted(KEY_BOGUS, Integer.class)),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResourceConverted(KEY_BOGUS, Locale.getDefault(), Integer.class)),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Integer.class)),
+            () -> assertThrows(NoSuchResourceException.class,
+                () -> resourceResolver.resolveResourceConverted(KEY_BOGUS, TWO_ARGS, Locale.getDefault(), Integer.class))
+        );
     }
 }
