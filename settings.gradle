@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-enableFeaturePreview('STABLE_PUBLISHING')
-
 rootProject.name = 'jsr377-tck'
 
 includeBuild '../jsr377-api'
