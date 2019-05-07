@@ -17,8 +17,8 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'org.kordamp.gradle.build-scan' version '0.17.0'
-    id 'org.kordamp.gradle.project'    version '0.17.0'
+    id 'org.kordamp.gradle.build-scan' version '0.19.0'
+    id 'org.kordamp.gradle.project'    version '0.19.0'
     id 'org.jonnyzzz.java9c'           version '0.2.3'
 }
 
