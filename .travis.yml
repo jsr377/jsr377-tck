@@ -1,6 +1,6 @@
 language: java
 install: true
-jdk: oraclejdk8
+jdk: openjdk8
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
@@ -13,7 +13,7 @@ before_script:
   - cd ../..
   - git clone --depth=50 --branch=master https://github.com/jsr377/jsr377-api.git jsr377/jsr377-api
   - cd jsr377/jsr377-tck
-script: ./gradlew --console=plain clean build
+script: ./gradlew clean build -S
 env: TERM=dumb
 notifications:
   webhooks:
